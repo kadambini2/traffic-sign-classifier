@@ -1,67 +1,52 @@
-import streamlit as st 
+import streamlit as st
 from PIL import Image
-import classify 
 import numpy as np
 
+# Page config
+st.set_page_config(page_title="Traffic Sign Classifier", page_icon="🚦")
+
+# Title
+st.title("🚦 Traffic Sign Classifier")
+st.write("Upload an image of a traffic sign and get prediction")
+
+# Upload image
+uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg"])
+
+# Class labels (you can expand later)
 sign_names = {
-        0: 'Speed limit (20km/h)',
-        1: 'Speed limit (30km/h)',
-        2: 'Speed limit (50km/h)',
-        3: 'Speed limit (60km/h)',
-        4: 'Speed limit (70km/h)',
-        5: 'Speed limit (80km/h)',
-        6: 'End of speed limit (80km/h)',
-        7: 'Speed limit (100km/h)',
-        8: 'Speed limit (120km/h)',
-        9: 'No passing',
-        10: 'No passing for vehicles over 3.5 metric tons',
-        11: 'Right-of-way at the next intersection',
-        12: 'Priority road',
-        13: 'Yield',
-        14: 'Stop',
-        15: 'No vehicles',
-        16: 'Vehicles over 3.5 metric tons prohibited',
-        17: 'No entry',
-        18: 'General caution',
-        19: 'Dangerous curve to the left',
-        20: 'Dangerous curve to the right',
-        21: 'Double curve',
-        22: 'Bumpy road',
-        23: 'Slippery road',
-        24: 'Road narrows on the right',
-        25: 'Road work',
-        26: 'Traffic signals',
-        27: 'Pedestrians',
-        28: 'Children crossing',
-        29: 'Bicycles crossing',
-        30: 'Beware of ice/snow',
-        31: 'Wild animals crossing',
-        32: 'End of all speed and passing limits',
-        33: 'Turn right ahead',
-        34: 'Turn left ahead',
-        35: 'Ahead only',
-        36: 'Go straight or right',
-        37: 'Go straight or left',
-        38: 'Keep right',
-        39: 'Keep left',
-        40: 'Roundabout mandatory',
-        41: 'End of no passing',
-        42: 'End of no passing by vehicles over 3.5 metric tons'}
+    0: "Speed Limit 20 km/h",
+    1: "Speed Limit 30 km/h",
+    2: "Speed Limit 50 km/h",
+    3: "Speed Limit 60 km/h",
+    4: "Stop",
+    5: "No Entry",
+    6: "Yield",
+    7: "No Passing",
+    8: "Turn Right",
+    9: "Turn Left"
+}
 
-st.title("Traffic Sign Classifier")
+# Dummy prediction function (replace with ML model later)
+def predict_image(image):
+    img = image.resize((32, 32))
+    img = np.array(img)
+    
+    # Fake prediction (for now)
+    prediction = np.random.randint(0, len(sign_names))
+    return prediction
 
-uploaded_file = st.file_uploader("Choose an image...", type="jpg")
+# When user uploads image
 if uploaded_file is not None:
+    image = Image.open(uploaded_file)
 
-        image = Image.open(uploaded_file)
-        st.image(image, caption='Uploaded Image', use_column_width=True)
+    st.image(image, caption="Uploaded Image", use_column_width=True)
 
-        st.write("")
+    st.write("🔍 Classifying...")
 
-        if st.button('predict'):
-                st.write("Result...")
-                label = classify.predict(uploaded_file)
-                label = label.item()
+    prediction = predict_image(image)
 
-                res = sign_names.get(label)
-                st.markdown(res)
+    result = sign_names.get(prediction, "Unknown Sign")
+
+    st.success(f"✅ Prediction: {result}")
+       
+       
